@@ -31,6 +31,8 @@ namespace SalesApi.Models
 
     public int Quantity { get; set; }
 
+    //public Guid OrderId { get; set; }
+
     public virtual Item Item { get; set; }
 
     public virtual Order Order { get; set; }
@@ -52,5 +54,20 @@ namespace SalesApi.Models
     public int Id { get; set; }
 
     public string Description { get; set; }
+  }
+
+  public class OrderLineRequest
+  {
+    //public Guid OrderId { get; set; }
+
+    public Item Item { get; set; }
+
+    public int Quantity { get; set; }
+  }
+
+  public class OrderRequest
+  {
+    public int ClientId { get; set; }
+    public IEnumerable<OrderLineRequest> OrderLineRequests { get; set; }
   }
 }
