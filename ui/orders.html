@@ -12,7 +12,7 @@
 	
   <title>Cool Salesman Software</title>
 </head>
-<body ng-app="myApp" ng-controller="myCtrl" ng-cloak>
+<body ng-app="myApp" ng-controller="myCtrl" ng-cloak ng-init="FetchOrders()">
   <p>This is the orders page.</p>
   <div>
     <!--<button ng-click="ViewOrders()">View Orders</button>-->
@@ -28,7 +28,7 @@
       </tr>
       <tr ng-repeat="order in orders" ng-class="rowClass(order)">
         <td>{{order.id}}</td>
-        <td>{{order.clientId}}</td>
+        <td>{{order.client.id}}</td>
         <td>
           <button id="editBtn" ng-click="ShowOrderLines(order.orderLines)">Edit</button>
           <button id="deleteBtn">Delete</button>

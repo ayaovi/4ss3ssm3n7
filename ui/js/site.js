@@ -1,25 +1,38 @@
 (function () {
   const app = angular.module("myApp", []);
-  const apiBaseUrl = 'http://localhost:50032'
+  const apiBaseUrl = 'http://localhost:55497/';
+  const ordersUri = "api/orders";
   const errorMessage = function (data, status) {
     return `Error: ${status}${data.Message !== undefined ? (` ${data.Message}`) : ""}`;
   };
 
   app.controller("myCtrl", ["$http", "$scope", function ($http, $scope) {
     $scope.orders = [{
-      id: "1",
-      clientId: "1",
+      id: 1,
+      client: {
+        id: 1
+      },
       orderLines: [
         {
-          id: "1",
+          id: 1,
         },
         {
-          id: "2"
+          id: 2
         }
       ]
     }];
+    
+    $scope.FetchOrders = function () {
+      $http.get(`${apiBaseUrl}/${ordersUri}`)
+        .success(function (data, _) {
+          $scope.orders = data;
+        })
+        .error(function (data, status) {
+          $scope.errorToSearch = errorMessage(data, status);
+        });
+    }
 
-    $scope.viewOrders = function () {
+    $scope.ViewOrders = function () {
 
     }
 
