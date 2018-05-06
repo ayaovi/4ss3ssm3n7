@@ -61,9 +61,9 @@
         </tr>
         <tr ng-repeat="orderline in orderlines" ng-class="rowClass(order)">
         <td>{{orderline.id}}</td>
-        <td>{{orderline.item.id}}</td>
+        <td><input type="number" value="{{orderline.item.id}}"/></td>
         <td>{{orderline.order.id}}</td>
-        <td>{{orderline.quantity}}</td>
+        <td><input type="number" value="{{orderline.quantity}}"/></td>
       </tr>
       </table>
     </div>

@@ -35,7 +35,11 @@
       }
     }];
     
-    $scope.FetchOrders = function () {
+    $scope.FetchOrders = async function () {
+//      let result = await $scope.FetchData(`${apiBaseUrl}${ordersUri}`);
+//      if (result != undefined) {
+//        $scope.orders = result;
+//      }
       $http.get(`${apiBaseUrl}/${ordersUri}`)
         .success(function (data, _) {
           $scope.orders = data;
@@ -55,8 +59,20 @@
         });
     }
 
-    $scope.ViewOrders = function () {
-
+//    $scope.FetchData = function (url) {
+//      $http.get(url)
+//        .success(function (data, _) {
+//          return data;
+//        })
+//        .error(function (data, status) {
+//          //TODO log error.
+//          return undefined;
+//        });
+//    }
+    
+    $scope.ShowOrderLines = function (orderId) {
+      $scope.FetchOrderLines(orderId);
+      document.getElementById("myModal").style.display = "block";
     }
 
     $scope.getActivePlayers = function () {

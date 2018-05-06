@@ -22,7 +22,8 @@ namespace SalesApi.Controllers
         context.Items.Load();
         return context.Orders
                       .Include(x => x.Client)
-                      .Include(x => x.OrderLines);
+                      .Include(x => x.OrderLines)
+                      .ToList();
       }
     }
 
