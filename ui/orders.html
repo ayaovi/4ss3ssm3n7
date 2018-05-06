@@ -9,7 +9,7 @@
   <script src="lib/angular-1.3.14.min.js"></script>
   <script src="lib/jquery-3.2.1.min.js"></script>
   <script src="js/site.js"></script>
-	
+  	
   <title>Cool Salesman Software</title>
 </head>
 <body ng-app="myApp" ng-controller="myCtrl" ng-cloak ng-init="FetchOrders()">
@@ -41,7 +41,8 @@
   <!-- Modal content -->
   <div class="modal-content">
     <div class="modal-header">
-      <span class="close">&times;</span>
+      <span class="close" ng-click="CloseOrderLines()">&times;</span>
+      <p>something here</p>
     </div>
     <div class="modal-body">
       <table id="ordLineTbl">

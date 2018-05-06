@@ -73,36 +73,20 @@
     $scope.ShowOrderLines = function (orderId) {
       $scope.FetchOrderLines(orderId);
       document.getElementById("myModal").style.display = "block";
+      document.getElementsByClassName("close")[0].style.display = "block";
     }
-
-    $scope.getActivePlayers = function () {
-      $http.get(`${apiBaseUrl}/${usersUri}/all`)
-        .success(function (data, _) {
-          $scope.playersOnline = data.filter(player => player.Name !== $("#gamer-name").val());
-        })
-        .error(function (data, status) {
-          $scope.errorToSearch = errorMessage(data, status);
-        });
-    };
-
-    $scope.setupPvP = function () {
-      $http.get(`${apiBaseUrl}/${agniKaiUri}/initiate`).then(response => {
-        $scope.agnikaiTicket = response.data;
-        gameHubProxy.server.agniKaiStartNotification($scope.agnikaiTicket, $scope.selectedPlayer.Name);
-        const req = {
-          method: "POST",
-          url: `${apiBaseUrl}/${usersUri}/submit`,
-          data: {
-            token: $scope.gameToken.Value,
-            ticket: $scope.agnikaiTicket
-          }
-        }
-        $http(req).then(response => {
-          $scope.indicator = util.fieldToIndicator(response.data);
-		      console.log(`${$("#gamer-name").val()}'s indicator is ${$scope.indicator}`);
-        });
-        gameHubProxy.server.joinAgniKai($scope.agnikaiTicket);
-      });
+    
+    $scope.CloseOrderLines = function () {
+      // When the user clicks on <span> (x), close the modal
+      document.getElementsByClassName("close")[0].style.display = "none";
+      document.getElementById("myModal").style.display = "none";
     }
+    
+    // When the user clicks anywhere outside of the modal, close it
+//    window.onclick = function (event) {
+//      if (event.target === document.getElementById("myModal")) {
+//        document.getElementById("myModal").style.display = "none";
+//      }
+//    }
   }]);
 })();
