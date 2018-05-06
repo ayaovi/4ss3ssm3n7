@@ -30,11 +30,47 @@
         <td>{{order.id}}</td>
         <td>{{order.client.id}}</td>
         <td>
-          <button id="editBtn" ng-click="ShowOrderLines(order.orderLines)">Edit</button>
+          <button id="editBtn" ng-click="ShowOrderLines(order.id)">Edit</button>
           <button id="deleteBtn">Delete</button>
         </td>
       </tr>
     </table>
   </div>
+  
+  <div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close">&times;</span>
+    </div>
+    <div class="modal-body">
+      <table id="ordLineTbl">
+        <tr>
+          <th>
+            Id
+          </th>
+          <th>
+            ItemId
+          </th>
+          <th>
+            OrderId
+          </th>
+          <th>
+            Quantity
+          </th>
+        </tr>
+        <tr ng-repeat="orderline in orderlines" ng-class="rowClass(order)">
+        <td>{{orderline.id}}</td>
+        <td>{{orderline.item.id}}</td>
+        <td>{{orderline.order.id}}</td>
+        <td>{{orderline.quantity}}</td>
+      </tr>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button>Save</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>

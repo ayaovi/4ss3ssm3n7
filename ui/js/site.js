@@ -2,6 +2,7 @@
   const app = angular.module("myApp", []);
   const apiBaseUrl = 'http://localhost:55497/';
   const ordersUri = "api/orders";
+  const orderlinesUri = "api/orderlines";
   const errorMessage = function (data, status) {
     return `Error: ${status}${data.Message !== undefined ? (` ${data.Message}`) : ""}`;
   };
@@ -22,10 +23,32 @@
       ]
     }];
     
+    $scope.orderlines = [{
+      id: 1,
+      quantity: 2,
+      item: {
+        id: 1,
+        description: "An item"
+      },
+      order: {
+        id: 1
+      }
+    }];
+    
     $scope.FetchOrders = function () {
       $http.get(`${apiBaseUrl}/${ordersUri}`)
         .success(function (data, _) {
           $scope.orders = data;
+        })
+        .error(function (data, status) {
+          $scope.errorToSearch = errorMessage(data, status);
+        });
+    }
+    
+    $scope.FetchOrderLines = function (orderId) {
+      $http.get(`${apiBaseUrl}/${orderlinesUri}/${orderId}`)
+        .success(function (data, _) {
+          $scope.orderlines = data;
         })
         .error(function (data, status) {
           $scope.errorToSearch = errorMessage(data, status);
