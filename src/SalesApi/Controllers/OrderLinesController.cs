@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,27 +11,28 @@ using SalesApi.Models;
 namespace SalesApi.Controllers
 {
   [Route("api/[controller]")]
-  public class OrdersController : Controller
+  public class OrderLinesController : Controller
   {
     // GET: api/<controller>
     [HttpGet]
-    public IEnumerable<Order> Get()
+    public IEnumerable<string> Get()
+    {
+      return new[] { "value1", "value2" };
+    }
+
+    // GET api/<controller>/5
+    [HttpGet("{id}")]
+    public IEnumerable<OrderLine> Get(Guid id)
     {
       using (var context = new SalesContext())
       {
         context.Materials.Load();
         context.Items.Load();
-        return context.Orders
-                      .Include(x => x.Client)
-                      .Include(x => x.OrderLines);
+        context.OrderLines.Load();
+        context.Clients.Load();
+        var orderLines = context.Orders.Single(x => x.Id == id).OrderLines.ToList();
+        return orderLines;
       }
-    }
-
-    // GET api/<controller>/5
-    [HttpGet("{id}")]
-    public string Get(int id)
-    {
-      return "value";
     }
 
     // POST api/<controller>
