@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace SalesApi
 {
@@ -14,6 +15,9 @@ namespace SalesApi
       services.AddMvc().AddJsonOptions(options =>
       {
         options.SerializerSettings.Formatting = Formatting.Indented;
+        options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.None;
       });
     }
 

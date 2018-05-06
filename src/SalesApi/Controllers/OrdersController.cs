@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SalesApi.Contexts;
+using SalesApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,9 +14,16 @@ namespace SalesApi.Controllers
   {
     // GET: api/<controller>
     [HttpGet]
-    public IEnumerable<string> Get()
+    public IEnumerable<Order> Get()
     {
-      return new[] { "value1", "value2" };
+      using (var context = new SalesContext())
+      {
+        context.Materials.Load();
+        context.Items.Load();
+        return context.Orders
+                      .Include(x => x.Client)
+                      .Include(x => x.OrderLines).ToList();
+      }
     }
 
     // GET api/<controller>/5
