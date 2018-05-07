@@ -20,6 +20,7 @@ namespace SalesApi.Persistence
     void AddOrderLine(OrderLine orderLine);
 
     void UpdateOrder(OrderRequest request);
+    void DeleteOrder(Guid orderId);
   }
 
   public class SalesRepository : ISalesRepository
@@ -136,6 +137,25 @@ namespace SalesApi.Persistence
         });
 
         context.Orders.Update(order);
+        context.SaveChanges();
+      }
+    }
+
+    public void DeleteOrder(Guid orderId)
+    {
+      using (var context = new SalesContext())
+      {
+        context.Materials.AsNoTracking().Load();
+        context.Items.AsNoTracking().Load();
+        context.OrderLines.Load();
+        context.Clients.AsNoTracking().Load();
+
+        var order = context.Orders.Include(x => x.OrderLines).SingleOrDefault(x => x.Id == orderId);
+        if (order == default(Order))
+        {
+          throw new Exception($"The specified order {orderId} does not exist.");
+        }
+        context.Orders.Remove(order);
         context.SaveChanges();
       }
     }

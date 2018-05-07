@@ -68,11 +68,19 @@ namespace SalesApi.Controllers
       }
     }
 
-    // DELETE api/<controller>/5
-    [HttpDelete("{id}")]
-    public void Delete(int id)
+    // DELETE api/<controller>
+    [HttpDelete]
+    public IActionResult Delete([FromBody] Guid orderId)
     {
-      //TODO
+      try
+      {
+        _repository.DeleteOrder(orderId);
+        return Ok();
+      }
+      catch (Exception e)
+      {
+        return NotFound(e.Message);
+      }
     }
   }
 }
