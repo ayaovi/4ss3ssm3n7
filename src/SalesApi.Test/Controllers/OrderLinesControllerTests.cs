@@ -12,7 +12,7 @@ using SalesApi.Persistence;
 namespace SalesApi.Test.Controllers
 {
   [TestFixture]
-  class OrderLinesControllerTests
+  public class OrderLinesControllerTests
   {
     [Test]
     public void Get_GivenValidOrderId_ExpectResult()

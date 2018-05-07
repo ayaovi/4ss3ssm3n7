@@ -27,7 +27,7 @@ namespace SalesApi.Controllers
         var orders = _repository.GetOrders();
         return Ok(orders);
       }
-      catch (Exception e)
+      catch (Exception)
       {
         return NotFound("Unable to retrieve orders.");
       }
