@@ -18,7 +18,7 @@ namespace SalesApi.Controllers
     /// <summary>
     ///   Retrieves all orders in the system.
     /// </summary>
-    /// <returns>A collection of orders, otherwise a not found result.</returns>
+    /// <returns>A collection of orders.</returns>
     [HttpGet]
     public IActionResult Get()
     {
