@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SalesApi.Contexts;
 using SalesApi.Models;
+using SalesApi.Persistence;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,19 +14,17 @@ namespace SalesApi.Controllers
   [Route("api/[controller]")]
   public class OrdersController : Controller
   {
+    private readonly ISalesRepository _repository;
+
+    public OrdersController(ISalesRepository repository)
+    {
+      _repository = repository;
+    }
     // GET: api/<controller>
     [HttpGet]
     public IEnumerable<Order> Get()
     {
-      using (var context = new SalesContext())
-      {
-        context.Materials.Load();
-        context.Items.Load();
-        return context.Orders
-                      .Include(x => x.Client)
-                      .Include(x => x.OrderLines)
-                      .ToList();
-      }
+      return _repository.GetOrders();
     }
 
     // GET api/<controller>/5

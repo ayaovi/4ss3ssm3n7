@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using SalesApi.Persistence;
 
 namespace SalesApi
 {
@@ -21,6 +21,7 @@ namespace SalesApi
         options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.None;
       });
       services.AddCors();
+      services.AddScoped<ISalesRepository, SalesRepository>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
