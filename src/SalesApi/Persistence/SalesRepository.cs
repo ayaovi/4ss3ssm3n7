@@ -9,6 +9,15 @@ namespace SalesApi.Persistence
 {
   public class SalesRepository : ISalesRepository
   {
+    public static void CreateDatabase()
+    {
+      using (var context = new SalesContext())
+      {
+        context.Database.EnsureCreated();
+        context.SaveChanges();
+      }
+    }
+
     /// <summary>
     ///   Retrieves all orders in the system.
     /// </summary>

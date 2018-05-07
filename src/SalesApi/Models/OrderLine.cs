@@ -13,7 +13,7 @@ namespace SalesApi.Models
     ///   The number of item in this orderline.
     /// </summary>
     public int Quantity { get; set; }
-
+    
     /// <summary>
     ///   An oderline refers to an item.
     /// </summary>

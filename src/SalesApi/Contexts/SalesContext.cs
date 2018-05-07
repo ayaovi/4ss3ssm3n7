@@ -40,6 +40,7 @@ namespace SalesApi.Contexts
       modelBuilder.Entity<Order>(entity =>
       {
         entity.HasKey(e => e.Id);
+        entity.Property(x => x.Date).IsRequired();
         entity.HasOne(e => e.Client)
               .WithMany(c => c.Orders)
               .IsRequired();

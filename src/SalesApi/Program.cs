@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using SalesApi.Persistence;
 
 namespace SalesApi
 {
@@ -7,6 +8,7 @@ namespace SalesApi
   {
     public static void Main(string[] args)
     {
+      SalesRepository.CreateDatabase();
       BuildWebHost(args).Run();
     }
 
