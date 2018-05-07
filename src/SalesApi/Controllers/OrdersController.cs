@@ -45,48 +45,14 @@ namespace SalesApi.Controllers
     [HttpPost]
     public IActionResult Post([FromBody]OrderRequest request)
     {
-      using (var context = new SalesContext())
+      try
       {
-        //context.Clients.Load();
-        //if client does not exist, do not place order.
-        var clients = context.Clients;
-        if (!context.Clients.Any(x => x.Id == request.ClientId))
-        {
-          //client does not exist.
-          return NotFound();
-        }
-
-        var items = context.Items;
-
-        if (request.OrderLineRequests.Select(x => x.Item.Id).Select(x => items.Any(y => y.Id == x)).Any(x => x == false))
-        {
-          //there is a supplied item that does not exist.
-          return NotFound();
-        }
-
-        var order = new Order
-        {
-          Id = new Guid(),
-          Client = clients.Single(x => x.Id == request.ClientId),
-          OrderLines = new List<OrderLine>()
-        };
-
-        request.OrderLineRequests.ToList().ForEach(x =>
-        {
-          var orderLine = new OrderLine
-          {
-            Id = new Guid(),
-            Item = items.Single(y => y.Id == x.Item.Id),
-            Order = order,
-            Quantity = x.Quantity
-          };
-          order.OrderLines.Add(orderLine);
-          context.OrderLines.Add(orderLine);
-        });
-
-        context.Orders.Add(order);
-        context.SaveChanges();
+        _repository.AddOrder(request);
         return Ok();
+      }
+      catch (Exception e)
+      {
+        return NotFound(e.Message);
       }
     }
 
