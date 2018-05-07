@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SalesApi.Contexts;
 using SalesApi.Models;
 using SalesApi.Persistence;
@@ -22,9 +21,17 @@ namespace SalesApi.Controllers
     }
     // GET: api/<controller>
     [HttpGet]
-    public IEnumerable<Order> Get()
+    public IActionResult Get()
     {
-      return _repository.GetOrders();
+      try
+      {
+        var orders = _repository.GetOrders();
+        return Ok(orders);
+      }
+      catch (Exception e)
+      {
+        return NotFound("Unable to retrieve orders.");
+      }
     }
 
     // GET api/<controller>/5

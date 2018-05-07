@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SalesApi.Contexts;
-using SalesApi.Models;
+using SalesApi.Persistence;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,6 +10,13 @@ namespace SalesApi.Controllers
   [Route("api/[controller]")]
   public class OrderLinesController : Controller
   {
+    private readonly ISalesRepository _repository;
+
+    public OrderLinesController(ISalesRepository repository)
+    {
+      _repository = repository;
+    }
+
     // GET: api/<controller>
     [HttpGet]
     public IEnumerable<string> Get()
@@ -22,16 +26,16 @@ namespace SalesApi.Controllers
 
     // GET api/<controller>/5
     [HttpGet("{id}")]
-    public IEnumerable<OrderLine> Get(Guid id)
+    public IActionResult Get(Guid orderId)
     {
-      using (var context = new SalesContext())
+      try
       {
-        context.Materials.Load();
-        context.Items.Load();
-        context.OrderLines.Load();
-        context.Clients.Load();
-        var orderLines = context.Orders.Single(x => x.Id == id).OrderLines.ToList();
-        return orderLines;
+        var orderlines = _repository.GetOrderLinesByOrderId(orderId);
+        return Ok(orderlines);
+      }
+      catch (Exception e)
+      {
+        return NotFound($"There is no order with id {orderId}.");
       }
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using SalesApi.Contexts;
@@ -11,7 +12,7 @@ namespace SalesApi.Persistence
     IEnumerable<Order> GetOrders();
     void AddOrder(Order order);
     IEnumerable<OrderLine> GetOrderLines();
-    IEnumerable<OrderLine> GetOrderLinesByOrderId();
+    IEnumerable<OrderLine> GetOrderLinesByOrderId(Guid orderId);
     void AddOrderLine(OrderLine orderLine);
   }
 
@@ -37,12 +38,20 @@ namespace SalesApi.Persistence
 
     public IEnumerable<OrderLine> GetOrderLines()
     {
-      throw new System.NotImplementedException();
+      throw new NotImplementedException();
     }
 
-    public IEnumerable<OrderLine> GetOrderLinesByOrderId()
+    public IEnumerable<OrderLine> GetOrderLinesByOrderId(Guid orderId)
     {
-      throw new System.NotImplementedException();
+      using (var context = new SalesContext())
+      {
+        context.Materials.Load();
+        context.Items.Load();
+        context.OrderLines.Load();
+        context.Clients.Load();
+        var orderLines = context.Orders.Single(x => x.Id == orderId).OrderLines.ToList();
+        return orderLines;
+      }
     }
 
     public void AddOrderLine(OrderLine orderLine)
