@@ -8,8 +8,10 @@
   };
 
   app.controller("myCtrl", ["$http", "$scope", function ($http, $scope) {
+    let today = new Date();
     $scope.orders = [{
       id: 1,
+      date: today.getDate(),
       client: {
         id: 1
       },

@@ -20,7 +20,7 @@ namespace SalesApi.Controllers
     /// </summary>
     /// <param name="orderId">Identifies the order in question.</param>
     /// <returns>A collection of orderlines</returns>
-    [HttpGet("{id}")]
+    [HttpGet("{orderId}")]
     public async Task<IActionResult> Get(Guid orderId)
     {
       try

@@ -32,7 +32,7 @@ namespace SalesApi
         app.UseDeveloperExceptionPage();
       }
 
-      app.UseCors(builder => builder.AllowAnyOrigin());
+      app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials());
       app.UseMvc();
     }
   }

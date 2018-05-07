@@ -24,11 +24,15 @@
         <th>
           ClientId
         </th>
+        <th>
+          Date
+        </th>
         <th></th>
       </tr>
       <tr ng-repeat="order in orders" ng-class="rowClass(order)">
         <td>{{order.id}}</td>
         <td>{{order.client.id}}</td>
+        <td>{{order.date}}</td>
         <td>
           <button id="editBtn" ng-click="ShowOrderLines(order.id)">Edit</button>
           <button id="deleteBtn">Delete</button>

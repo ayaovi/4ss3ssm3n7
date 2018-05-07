@@ -19,7 +19,7 @@ namespace SalesApi.Test.Controllers
     public async Task Get_GivenValidOrderId_ExpectResult()
     {
       //Arrange
-      var orderId = new Guid();
+      var orderId = Guid.NewGuid();
       var order = new Order
       {
         Id = orderId
@@ -28,12 +28,12 @@ namespace SalesApi.Test.Controllers
       {
         new OrderLine
         {
-          Id = new Guid(),
+          Id = Guid.NewGuid(),
           Order = order
         },
         new OrderLine
         {
-          Id = new Guid(),
+          Id = Guid.NewGuid(),
           Order = order
         }
       };
