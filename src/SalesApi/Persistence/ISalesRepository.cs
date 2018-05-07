@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using SalesApi.Models;
 
 namespace SalesApi.Persistence
 {
   public interface ISalesRepository
   {
-    IEnumerable<Order> GetOrders();
+    Task<IEnumerable<Order>> GetOrdersAsync();
 
-    void AddOrder(OrderRequest order);
+    Task AddOrderAsync(OrderRequest order);
 
-    IEnumerable<OrderLine> GetOrderLinesByOrderId(Guid orderId);
+    Task<IEnumerable<OrderLine>> GetOrderLinesByOrderIdAsync(Guid orderId);
 
-    void UpdateOrder(OrderRequest request);
+    Task UpdateOrderAsync(OrderRequest request);
 
-    void DeleteOrder(Guid orderId);
+    Task DeleteOrderAsync(Guid orderId);
   }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SalesApi.Contexts;
 using SalesApi.Models;
@@ -22,16 +23,17 @@ namespace SalesApi.Persistence
     ///   Retrieves all orders in the system.
     /// </summary>
     /// <returns></returns>
-    public IEnumerable<Order> GetOrders()
+    public async Task<IEnumerable<Order>> GetOrdersAsync()
     {
       using (var context = new SalesContext())
       {
         context.Materials.Load();
         context.Items.Load();
-        return context.Orders
-                      .Include(x => x.Client)
-                      .Include(x => x.OrderLines)
-                      .ToList();
+        var orders = await context.Orders
+                                  .Include(x => x.Client)
+                                  .Include(x => x.OrderLines)
+                                  .ToListAsync();
+        return orders;
       }
     }
 
@@ -39,7 +41,7 @@ namespace SalesApi.Persistence
     ///   Creates an order from the request parameters and adds it to the database.
     /// </summary>
     /// <param name="request"></param>
-    public void AddOrder(OrderRequest request)
+    public async Task AddOrderAsync(OrderRequest request)
     {
       using (var context = new SalesContext())
       {
@@ -65,12 +67,12 @@ namespace SalesApi.Persistence
           OrderLines = new List<OrderLine>()
         };
 
-        request.OrderLineRequests.ToList().ForEach(x =>
+        request.OrderLineRequests.ToList().ForEach(async x =>
         {
           var orderLine = new OrderLine
           {
             Id = Guid.NewGuid(),
-            Item = items.Single(y => y.Id == x.Item.Id),
+            Item = await items.SingleAsync(y => y.Id == x.Item.Id),
             Order = order,
             Quantity = x.Quantity
           };
@@ -79,7 +81,7 @@ namespace SalesApi.Persistence
         });
 
         context.Orders.Add(order);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
       }
     }
 
@@ -88,15 +90,15 @@ namespace SalesApi.Persistence
     /// </summary>
     /// <param name="orderId"></param>
     /// <returns>collection of orderlines.</returns>
-    public IEnumerable<OrderLine> GetOrderLinesByOrderId(Guid orderId)
+    public async Task<IEnumerable<OrderLine>> GetOrderLinesByOrderIdAsync(Guid orderId)
     {
       using (var context = new SalesContext())
       {
-        context.Materials.Load();
-        context.Items.Load();
-        context.OrderLines.Load();
-        context.Clients.Load();
-        var orderLines = context.Orders.Single(x => x.Id == orderId).OrderLines.ToList();
+        await context.Materials.LoadAsync();
+        await context.Items.LoadAsync();
+        await context.OrderLines.LoadAsync();
+        await context.Clients.LoadAsync();
+        var orderLines = (await context.Orders.SingleAsync(x => x.Id == orderId)).OrderLines.ToList();
         return orderLines;
       }
     }
@@ -105,25 +107,26 @@ namespace SalesApi.Persistence
     ///   Updates the details of the specified order.
     /// </summary>
     /// <param name="request"></param>
-    public void UpdateOrder(OrderRequest request)
+    public async Task UpdateOrderAsync(OrderRequest request)
     {
       using (var context = new SalesContext())
       {
-        context.Materials.AsNoTracking().Load();
-        context.Items.AsNoTracking().Load();
-        context.OrderLines.Load();
-        context.Clients.AsNoTracking().Load();
+        await context.Materials.AsNoTracking().LoadAsync();
+        await context.Items.AsNoTracking().LoadAsync();
+        await context.OrderLines.LoadAsync();
+        await context.Clients.AsNoTracking().LoadAsync();
 
         var items = context.Items;
-        var order = context.Orders.Single(x => x.Id == request.OrderId);
+        var order = await context.Orders.SingleAsync(x => x.Id == request.OrderId);
         var orderLines = order.OrderLines;
-        request.OrderLineRequests.ToList().ForEach(x =>
+
+        request.OrderLineRequests.ToList().ForEach(async x =>
         {
           var orderLine = orderLines.SingleOrDefault(y => y.Id == x.OrderLineId);
           if (orderLine != default(OrderLine))
           {
             orderLine.Quantity = x.Quantity;
-            orderLine.Item = items.Single(k => k.Id == x.Item.Id);
+            orderLine.Item = await items.SingleAsync(k => k.Id == x.Item.Id);
           }
           else
           {
@@ -131,13 +134,13 @@ namespace SalesApi.Persistence
             {
               Id = x.OrderLineId,
               Quantity = x.Quantity,
-              Item = items.Single(k => k.Id == x.Item.Id) 
+              Item = await items.SingleAsync(k => k.Id == x.Item.Id) 
             });
           }
         });
 
         context.Orders.Update(order);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
       }
     }
 
@@ -145,23 +148,23 @@ namespace SalesApi.Persistence
     ///   Removes an order and all its subsequent orderline reccords.
     /// </summary>
     /// <param name="orderId"></param>
-    public void DeleteOrder(Guid orderId)
+    public async Task DeleteOrderAsync(Guid orderId)
     {
       using (var context = new SalesContext())
       {
-        context.Materials.AsNoTracking().Load();
-        context.Items.AsNoTracking().Load();
-        context.OrderLines.Load();
-        context.Clients.AsNoTracking().Load();
+        await context.Materials.AsNoTracking().LoadAsync();
+        await context.Items.AsNoTracking().LoadAsync();
+        await context.OrderLines.LoadAsync();
+        await context.Clients.AsNoTracking().LoadAsync();
 
-        var order = context.Orders.Include(x => x.OrderLines).SingleOrDefault(x => x.Id == orderId);
+        var order = await context.Orders.Include(x => x.OrderLines).SingleOrDefaultAsync(x => x.Id == orderId);
         if (order == default(Order))
         {
           throw new Exception($"The specified order {orderId} does not exist.");
         }
 
         context.Orders.Remove(order);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
       }
     }
   }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -14,7 +15,7 @@ namespace SalesApi.Test.Controllers
   public class OrdersControllerTests
   {
     [Test]
-    public void Get_GivenExistingOrders_ExpectResult()
+    public async Task Get_GivenExistingOrders_ExpectResult()
     {
       //Arrange
       var guid1 = new Guid();
@@ -42,11 +43,11 @@ namespace SalesApi.Test.Controllers
       };
 
       var repository = Substitute.For<ISalesRepository>();
-      repository.GetOrders().Returns(orders);
+      repository.GetOrdersAsync().Returns(orders);
       var controller = new OrdersController(repository);
 
       //Act
-      var result = controller.Get() as OkObjectResult;
+      var result = await controller.Get() as OkObjectResult;
       var value = result?.Value;
 
       //Assert
@@ -55,31 +56,31 @@ namespace SalesApi.Test.Controllers
     }
 
     [Test]
-    public void Post_GivenValidOrderRequest_ExpectOrderToBeAdded()
+    public async Task Post_GivenValidOrderRequest_ExpectOrderToBeAdded()
     {
       //Arrange
       var repository = Substitute.For<ISalesRepository>();
-      repository.When(x => x.AddOrder(Arg.Any<OrderRequest>())).Do(x => {});
+      repository.When(x => x.AddOrderAsync(Arg.Any<OrderRequest>())).Do(x => {});
       var controller = new OrdersController(repository);
 
       //Act
-      var result = controller.Post(new OrderRequest());
+      var result = await controller.Post(new OrderRequest());
     
       //Assert
       Assert.IsInstanceOf<OkResult>(result);
     }
 
     [Test]
-    public void Post_GivenNonExistingClientIdInOrderRequest_ExpectNotFound()
+    public async Task Post_GivenNonExistingClientIdInOrderRequest_ExpectNotFound()
     {
       //Arrange
       const string errorMessage = "Client with 1 does not exist.";
       var repository = Substitute.For<ISalesRepository>();
-      repository.When(x => x.AddOrder(Arg.Any<OrderRequest>())).Throw(new Exception(errorMessage));
+      repository.When(x => x.AddOrderAsync(Arg.Any<OrderRequest>())).Throw(new Exception(errorMessage));
       var controller = new OrdersController(repository);
 
       //Act
-      var result = controller.Post(new OrderRequest());
+      var result = await controller.Post(new OrderRequest());
       var objectResult = result as NotFoundObjectResult;
 
       //Assert
@@ -88,16 +89,16 @@ namespace SalesApi.Test.Controllers
     }
 
     [Test]
-    public void Post_GivenNonExistingItemInOrderRequest_ExpectNotFound()
+    public async Task Post_GivenNonExistingItemInOrderRequest_ExpectNotFound()
     {
       //Arrange
       const string errorMessage = "Some of the specified item(s) does not exist.";
       var repository = Substitute.For<ISalesRepository>();
-      repository.When(x => x.AddOrder(Arg.Any<OrderRequest>())).Throw(new Exception(errorMessage));
+      repository.When(x => x.AddOrderAsync(Arg.Any<OrderRequest>())).Throw(new Exception(errorMessage));
       var controller = new OrdersController(repository);
 
       //Act
-      var result = controller.Post(new OrderRequest());
+      var result = await controller.Post(new OrderRequest());
       var objectResult = result as NotFoundObjectResult;
 
       //Assert

@@ -63,7 +63,7 @@ namespace SalesApi.Contexts
         entity.HasKey(e => e.Id);
         entity.Property(e => e.Description).IsRequired();
         entity.HasOne(e => e.Material)
-              .WithOne()
+              .WithMany()
               .IsRequired();
       });
     }

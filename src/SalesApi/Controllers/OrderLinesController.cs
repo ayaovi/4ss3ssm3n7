@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SalesApi.Persistence;
 
@@ -20,14 +21,14 @@ namespace SalesApi.Controllers
     /// <param name="orderId">Identifies the order in question.</param>
     /// <returns>A collection of orderlines</returns>
     [HttpGet("{id}")]
-    public IActionResult Get(Guid orderId)
+    public async Task<IActionResult> Get(Guid orderId)
     {
       try
       {
-        var orderlines = _repository.GetOrderLinesByOrderId(orderId);
+        var orderlines = await _repository.GetOrderLinesByOrderIdAsync(orderId);
         return Ok(orderlines);
       }
-      catch (Exception e)
+      catch (Exception)
       {
         return NotFound($"There is no order with id {orderId}.");
       }

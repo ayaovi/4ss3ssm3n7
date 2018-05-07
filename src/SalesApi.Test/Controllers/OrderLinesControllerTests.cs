@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -15,7 +16,7 @@ namespace SalesApi.Test.Controllers
   public class OrderLinesControllerTests
   {
     [Test]
-    public void Get_GivenValidOrderId_ExpectResult()
+    public async Task Get_GivenValidOrderId_ExpectResult()
     {
       //Arrange
       var orderId = new Guid();
@@ -37,11 +38,11 @@ namespace SalesApi.Test.Controllers
         }
       };
       var repository = Substitute.For<ISalesRepository>();
-      repository.GetOrderLinesByOrderId(orderId).Returns(orderLines);
+      repository.GetOrderLinesByOrderIdAsync(orderId).Returns(orderLines);
       var controller = new OrderLinesController(repository);
 
       //Act
-      var result = controller.Get(orderId) as OkObjectResult;
+      var result = await controller.Get(orderId) as OkObjectResult;
       var value = result?.Value;
 
       //Assert
@@ -50,17 +51,17 @@ namespace SalesApi.Test.Controllers
     }
 
     [Test]
-    public void Get_GivenNonExistingOrderId_ExpectResult()
+    public async Task Get_GivenNonExistingOrderId_ExpectResult()
     {
       //Arrange
       var orderId = Guid.NewGuid();
       var errorMessage = $"There is no order with id {orderId}.";
       var repository = Substitute.For<ISalesRepository>();
-      repository.GetOrderLinesByOrderId(Arg.Any<Guid>()).ThrowsForAnyArgs(new Exception());
+      repository.GetOrderLinesByOrderIdAsync(Arg.Any<Guid>()).ThrowsForAnyArgs(new Exception());
       var controller = new OrderLinesController(repository);
 
       //Act
-      var result = controller.Get(orderId);
+      var result = await controller.Get(orderId);
       var objectResult = result as NotFoundObjectResult;
 
       //Assert

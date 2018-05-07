@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SalesApi.Models;
 using SalesApi.Persistence;
@@ -20,11 +21,11 @@ namespace SalesApi.Controllers
     /// </summary>
     /// <returns>A collection of orders.</returns>
     [HttpGet]
-    public IActionResult Get()
+    public async Task<IActionResult> Get()
     {
       try
       {
-        var orders = _repository.GetOrders();
+        var orders = await _repository.GetOrdersAsync();
         return Ok(orders);
       }
       catch (Exception)
@@ -39,11 +40,11 @@ namespace SalesApi.Controllers
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult Post([FromBody]OrderRequest request)
+    public async Task<IActionResult> Post([FromBody]OrderRequest request)
     {
       try
       {
-        _repository.AddOrder(request);
+        await _repository.AddOrderAsync(request);
         return Ok();
       }
       catch (Exception e)
@@ -58,11 +59,11 @@ namespace SalesApi.Controllers
     /// <param name="request">Contains all information relating to the order to update.</param>
     /// <returns></returns>
     [HttpPut]
-    public IActionResult Put([FromBody]OrderRequest request)
+    public async Task<IActionResult> Put([FromBody]OrderRequest request)
     {
       try
       {
-        _repository.UpdateOrder(request);
+        await _repository.UpdateOrderAsync(request);
         return Ok();
       }
       catch (Exception e)
@@ -77,11 +78,11 @@ namespace SalesApi.Controllers
     /// <param name="orderId">Identifies the order to delete.</param>
     /// <returns></returns>
     [HttpDelete]
-    public IActionResult Delete([FromBody] Guid orderId)
+    public async Task<IActionResult> Delete([FromBody] Guid orderId)
     {
       try
       {
-        _repository.DeleteOrder(orderId);
+        await _repository.DeleteOrderAsync(orderId);
         return Ok();
       }
       catch (Exception e)
