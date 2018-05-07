@@ -13,7 +13,7 @@ It is recommanded to have the api running before starting the  ui.
 
 ## api
 
-The api is backed by a Msql database. To setup, please modify the database connection string to specify the appropriate "user" and "password" (e.g. server=localhost;database=sales;user=user;password=password). Thereafter:
+The api is backed by a Msql database. To setup, please modify the database connection string (located at src/SalesApi/Contexts/SalesContext.cs) to specify the appropriate "user" and "password" (e.g. server=localhost;database=sales;user=user;password=password). Thereafter:
 
 * Start the api to ensure database and its object are created.
 * Run the sql script to populate the "materials", "clients", "items", "orders", "orderlines" tables.

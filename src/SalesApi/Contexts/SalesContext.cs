@@ -17,7 +17,7 @@ namespace SalesApi.Contexts
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-      optionsBuilder.UseMySql("server=localhost;database=sales;user=root;password=h3rm4nn");
+      optionsBuilder.UseMySql("server=localhost;database=sales;user=[user];password=[password]");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
