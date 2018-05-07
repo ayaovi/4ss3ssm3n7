@@ -134,6 +134,10 @@
       counter = 1;  /* reset counter */
     }
     
+    $scope.AddOrder = function () {
+      
+    }
+    
     $scope.DeleteOrder = function (orderId) {
       $http.delete(`${apiBaseUrl}/${ordersUri}/${orderId}`)
         .success(function (data, _) {
