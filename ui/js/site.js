@@ -99,11 +99,11 @@
     }
     
     $scope.SaveOrderEdit = function () {
-//      let tableRef = document.getElementById('ordLineTbl').getElementsByTagName('tbody')[0];
-      let table = document.getElementById("ordLineTbl");
+      let table = document.getElementById("ordLineTbl");  /* our table from the DOM. */
       
+      /* this is the order request we are making. */
       let order = {
-        ClientId: $scope.orderlines[0].order.clientId,
+        ClientId: $scope.orders[0].client.id,
         OrderId: $scope.orderlines[0].order.id,
         OrderLineRequests: []
       }
@@ -120,8 +120,15 @@
         order.OrderLineRequests.push(orderline);
       }
       
-      console.log("Done creating order.");
-      counter = 1;
+      $http.put(`${apiBaseUrl}/${ordersUri}`, JSON.stringify(order))
+        .success(function (data, _) {
+          $scope.orderlines = data;
+        })
+        .error(function (data, status) {
+          $scope.errorToSearch = errorMessage(data, status);
+        });
+      
+      counter = 1;  /* reset counter */
     }
     
     $scope.CloseOrderLines = function () {

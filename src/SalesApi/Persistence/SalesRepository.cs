@@ -132,7 +132,7 @@ namespace SalesApi.Persistence
           {
             orderLines.Add(new OrderLine
             {
-              Id = x.OrderLineId,
+              Id = x.OrderLineId != default(Guid) ? x.OrderLineId : Guid.NewGuid(),
               Quantity = x.Quantity,
               Item = await items.SingleAsync(k => k.Id == x.Item.Id) 
             });
