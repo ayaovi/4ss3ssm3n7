@@ -24,3 +24,5 @@ With the api running, open the ui/orders.html in a browser. At first, the list o
 
 * Edit: make changes to the order, by either changing some of the existing order lines or by adding new ones. 
 * Delete: removes the order from the system.
+
+As for adding a new order, one needs to select the appropriate client id and item ids.
