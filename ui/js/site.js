@@ -92,9 +92,9 @@
       let qty = newRow.insertCell(3);
       
       orderLineId.innerHTML = "----";
-      itemId.innerHTML = `<input id=\"itemId${couter}\" type=\"number\" placeholder=\"1\"/>`;
+      itemId.innerHTML = `<input id=\"itemId${counter}\" type=\"number\" placeholder=\"1\"/>`;
       orderId.innerHTML = `${$scope.orderlines[0].order.id}`;
-      qty.innerHTML = `<input id=\"itemId${couter}\" type=\"number\" placeholder=\"1\"/>`;
+      qty.innerHTML = `<input id=\"quantity${counter}\" type=\"number\" placeholder=\"1\"/>`;
       counter = counter + 1;  /* increment counter for next row to be added. */
     }
     
