@@ -35,7 +35,7 @@
         <td>{{order.date}}</td>
         <td>
           <button id="editBtn" ng-click="ShowOrderLines(order.id)">Edit</button>
-          <button id="deleteBtn">Delete</button>
+          <button id="deleteBtn" ng-click="DeleteOrder(order.id)">Delete</button>
         </td>
       </tr>
     </table>

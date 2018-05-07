@@ -77,8 +77,8 @@ namespace SalesApi.Controllers
     /// </summary>
     /// <param name="orderId">Identifies the order to delete.</param>
     /// <returns></returns>
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromBody] Guid orderId)
+    [HttpDelete("{orderId}")]
+    public async Task<IActionResult> Delete(Guid orderId)
     {
       try
       {

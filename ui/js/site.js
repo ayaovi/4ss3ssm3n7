@@ -134,6 +134,16 @@
       counter = 1;  /* reset counter */
     }
     
+    $scope.DeleteOrder = function (orderId) {
+      $http.delete(`${apiBaseUrl}/${ordersUri}/${orderId}`)
+        .success(function (data, _) {
+          /* do we need to relead the page. */
+        })
+        .error(function (data, status) {
+          $scope.errorToSearch = errorMessage(data, status);
+        });
+    }
+    
     $scope.CloseOrderLines = function () {
       // When the user clicks on <span> (x), close the modal
       document.getElementsByClassName("close")[0].style.display = "none";
