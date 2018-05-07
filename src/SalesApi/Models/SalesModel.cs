@@ -58,7 +58,7 @@ namespace SalesApi.Models
 
   public class OrderLineRequest
   {
-    //public Guid OrderId { get; set; }
+    public Guid OrderLineId { get; set; }
 
     public Item Item { get; set; }
 
@@ -68,6 +68,7 @@ namespace SalesApi.Models
   public class OrderRequest
   {
     public int ClientId { get; set; }
+    public Guid OrderId { get; set; }
     public IEnumerable<OrderLineRequest> OrderLineRequests { get; set; }
   }
 }

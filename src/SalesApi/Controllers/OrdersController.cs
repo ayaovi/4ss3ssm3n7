@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using SalesApi.Contexts;
 using SalesApi.Models;
 using SalesApi.Persistence;
 
@@ -58,14 +55,24 @@ namespace SalesApi.Controllers
 
     // PUT api/<controller>/5
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody]string value)
+    public IActionResult Put(int id, [FromBody]OrderRequest request)
     {
+      try
+      {
+        _repository.UpdateOrder(request);
+        return Ok();
+      }
+      catch (Exception e)
+      {
+        return NotFound(e.Message);
+      }
     }
 
     // DELETE api/<controller>/5
     [HttpDelete("{id}")]
     public void Delete(int id)
     {
+      //TODO
     }
   }
 }

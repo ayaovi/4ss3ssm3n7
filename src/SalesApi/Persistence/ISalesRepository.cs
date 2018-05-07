@@ -10,10 +10,16 @@ namespace SalesApi.Persistence
   public interface ISalesRepository
   {
     IEnumerable<Order> GetOrders();
+
     void AddOrder(OrderRequest order);
+
     IEnumerable<OrderLine> GetOrderLines();
+
     IEnumerable<OrderLine> GetOrderLinesByOrderId(Guid orderId);
+
     void AddOrderLine(OrderLine orderLine);
+
+    void UpdateOrder(OrderRequest request);
   }
 
   public class SalesRepository : ISalesRepository
@@ -35,7 +41,6 @@ namespace SalesApi.Persistence
     {
       using (var context = new SalesContext())
       {
-        //if client does not exist, do not place order.
         var clients = context.Clients;
         if (!context.Clients.Any(x => x.Id == request.ClientId))
         {
@@ -47,8 +52,8 @@ namespace SalesApi.Persistence
 
         if (request.OrderLineRequests.Select(x => x.Item.Id).Select(x => items.Any(y => y.Id == x)).Any(x => x == false))
         {
-          //there is a supplied item that does not exist.
-          throw new Exception($"Not all specified items exist.");
+          // there is a supplied item that does not exist.
+          throw new Exception("Not all specified items exist.");
         }
 
         var order = new Order
@@ -96,7 +101,43 @@ namespace SalesApi.Persistence
 
     public void AddOrderLine(OrderLine orderLine)
     {
-      throw new System.NotImplementedException();
+      throw new NotImplementedException();
+    }
+
+    public void UpdateOrder(OrderRequest request)
+    {
+      using (var context = new SalesContext())
+      {
+        context.Materials.AsNoTracking().Load();
+        context.Items.AsNoTracking().Load();
+        context.OrderLines.Load();
+        context.Clients.AsNoTracking().Load();
+
+        var items = context.Items;
+        var order = context.Orders.Single(x => x.Id == request.OrderId);
+        var orderLines = order.OrderLines;
+        request.OrderLineRequests.ToList().ForEach(x =>
+        {
+          var orderLine = orderLines.SingleOrDefault(y => y.Id == x.OrderLineId);
+          if (orderLine != default(OrderLine))
+          {
+            orderLine.Quantity = x.Quantity;
+            orderLine.Item = items.Single(k => k.Id == x.Item.Id);
+          }
+          else
+          {
+            orderLines.Add(new OrderLine
+            {
+              Id = x.OrderLineId,
+              Quantity = x.Quantity,
+              Item = items.Single(k => k.Id == x.Item.Id) 
+            });
+          }
+        });
+
+        context.Orders.Update(order);
+        context.SaveChanges();
+      }
     }
   }
 }
