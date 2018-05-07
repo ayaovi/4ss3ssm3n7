@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using SalesApi.Models;
 using SalesApi.Persistence;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace SalesApi.Controllers
 {
   [Route("api/[controller]")]
@@ -16,7 +14,11 @@ namespace SalesApi.Controllers
     {
       _repository = repository;
     }
-    // GET: api/<controller>
+
+    /// <summary>
+    ///   Retrieves all orders in the system.
+    /// </summary>
+    /// <returns>A collection of orders, otherwise a not found result.</returns>
     [HttpGet]
     public IActionResult Get()
     {
@@ -31,14 +33,11 @@ namespace SalesApi.Controllers
       }
     }
 
-    // GET api/<controller>/5
-    [HttpGet("{id}")]
-    public string Get(int id)
-    {
-      return "value";
-    }
-
-    // POST api/<controller>
+    /// <summary>
+    ///   Create a new order based on the order resquest.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost]
     public IActionResult Post([FromBody]OrderRequest request)
     {
@@ -53,9 +52,13 @@ namespace SalesApi.Controllers
       }
     }
 
-    // PUT api/<controller>/5
-    [HttpPut("{id}")]
-    public IActionResult Put(int id, [FromBody]OrderRequest request)
+    /// <summary>
+    ///   Updates a specified client's order.
+    /// </summary>
+    /// <param name="request">Contains all information relating to the order to update.</param>
+    /// <returns></returns>
+    [HttpPut]
+    public IActionResult Put([FromBody]OrderRequest request)
     {
       try
       {
@@ -68,7 +71,11 @@ namespace SalesApi.Controllers
       }
     }
 
-    // DELETE api/<controller>
+    /// <summary>
+    ///   Deletes a specified order.
+    /// </summary>
+    /// <param name="orderId">Identifies the order to delete.</param>
+    /// <returns></returns>
     [HttpDelete]
     public IActionResult Delete([FromBody] Guid orderId)
     {
