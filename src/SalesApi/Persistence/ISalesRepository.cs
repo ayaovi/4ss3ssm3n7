@@ -53,7 +53,7 @@ namespace SalesApi.Persistence
 
         var order = new Order
         {
-          Id = new Guid(),
+          Id = Guid.NewGuid(),
           Client = clients.Single(x => x.Id == request.ClientId),
           OrderLines = new List<OrderLine>()
         };
@@ -62,7 +62,7 @@ namespace SalesApi.Persistence
         {
           var orderLine = new OrderLine
           {
-            Id = new Guid(),
+            Id = Guid.NewGuid(),
             Item = items.Single(y => y.Id == x.Item.Id),
             Order = order,
             Quantity = x.Quantity
