@@ -37,6 +37,8 @@
       }
     }];
     
+    let counter = 1;
+    
     $scope.FetchOrders = async function () {
 //      let result = await $scope.FetchData(`${apiBaseUrl}${ordersUri}`);
 //      if (result != undefined) {
@@ -73,9 +75,53 @@
 //    }
     
     $scope.ShowOrderLines = function (orderId) {
+      currentOrderId = orderId;
       $scope.FetchOrderLines(orderId);
       document.getElementById("myModal").style.display = "block";
       document.getElementsByClassName("close")[0].style.display = "block";
+    }
+    
+    $scope.AddOrderLineRow = function () {
+      let tableRef = document.getElementById('ordLineTbl').getElementsByTagName('tbody')[0];
+      
+      let newRow   = tableRef.insertRow(tableRef.rows.length); /* Insert a row in the table at the last row */
+      
+      let orderLineId = newRow.insertCell(0);
+      let itemId = newRow.insertCell(1);
+      let orderId = newRow.insertCell(2);
+      let qty = newRow.insertCell(3);
+      
+      orderLineId.innerHTML = "----";
+      itemId.innerHTML = `<input id=\"itemId${couter}\" type=\"number\" placeholder=\"1\"/>`;
+      orderId.innerHTML = `${$scope.orderlines[0].order.id}`;
+      qty.innerHTML = `<input id=\"itemId${couter}\" type=\"number\" placeholder=\"1\"/>`;
+      counter = counter + 1;  /* increment counter for next row to be added. */
+    }
+    
+    $scope.SaveOrderEdit = function () {
+//      let tableRef = document.getElementById('ordLineTbl').getElementsByTagName('tbody')[0];
+      let table = document.getElementById("ordLineTbl");
+      
+      let order = {
+        ClientId: $scope.orderlines[0].order.clientId,
+        OrderId: $scope.orderlines[0].order.id,
+        OrderLineRequests: []
+      }
+      
+      for (var i = 0; i < counter; i++) {
+        let itemId = document.getElementById(`itemId${i}`);
+        let quantity = document.getElementById(`quantity${i}`);
+        let orderline = {
+          Item: {
+            Id: itemId.value,
+          },
+          Quantity: quantity.value
+        };
+        order.OrderLineRequests.push(orderline);
+      }
+      
+      console.log("Done creating order.");
+      counter = 1;
     }
     
     $scope.CloseOrderLines = function () {

@@ -66,14 +66,15 @@
         </tr>
         <tr ng-repeat="orderline in orderlines" ng-class="rowClass(order)">
         <td>{{orderline.id}}</td>
-        <td><input type="number" value="{{orderline.item.id}}"/></td>
+        <td><input id="itemId0" type="number" placeholder="{{orderline.item.id}}"/></td>
         <td>{{orderline.order.id}}</td>
-        <td><input type="number" value="{{orderline.quantity}}"/></td>
+        <td><input id="quantity0" type="number" placeholder="{{orderline.quantity}}"/></td>
       </tr>
       </table>
     </div>
     <div class="modal-footer">
-      <button>Save</button>
+      <button ng-click="SaveOrderEdit()">Save</button>
+      <button ng-click="AddOrderLineRow()">Add</button>
     </div>
   </div>
 </div>
