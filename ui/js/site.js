@@ -111,19 +111,22 @@
       for (var i = 0; i < counter; i++) {
         let itemId = document.getElementById(`itemId${i}`);
         let quantity = document.getElementById(`quantity${i}`);
+        
         let orderline = {
           Item: {
             Id: itemId.value,
           },
           Quantity: quantity.value
         };
+        
+        if (i < Object.keys($scope.orderlines).length) {
+          orderline.OrderLineId = $scope.orderlines[i].id;
+        }
         order.OrderLineRequests.push(orderline);
       }
       
       $http.put(`${apiBaseUrl}/${ordersUri}`, JSON.stringify(order))
-        .success(function (data, _) {
-          $scope.orderlines = data;
-        })
+        .success(function (_, _) { $scope.CloseOrderLines(); })
         .error(function (data, status) {
           $scope.errorToSearch = errorMessage(data, status);
         });
