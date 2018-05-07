@@ -63,6 +63,7 @@ namespace SalesApi.Persistence
         var order = new Order
         {
           Id = Guid.NewGuid(),
+          Date = DateTime.Today.Date,
           Client = clients.Single(x => x.Id == request.ClientId),
           OrderLines = new List<OrderLine>()
         };

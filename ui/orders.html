@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8" />
-	<link rel="stylesheet" href="./css/site.css">
-
-  <!--<script src="http://code.jquery.com/jquery.min.js"></script>-->
-<!--  <script src="https://code.angularjs.org/1.3.14/angular.min.js"></script>-->
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="./css/site.css">
+  
   <script src="lib/angular-1.3.14.min.js"></script>
   <script src="lib/jquery-3.2.1.min.js"></script>
   <script src="js/site.js"></script>
@@ -15,7 +13,6 @@
 <body ng-app="myApp" ng-controller="myCtrl" ng-cloak ng-init="FetchOrders()">
   <p>This is the orders page.</p>
   <div>
-    <!--<button ng-click="ViewOrders()">View Orders</button>-->
     <table class="table">
       <tr>
         <th>
@@ -43,41 +40,73 @@
   </div>
   
   <div id="myModal" class="modal">
-  <!-- Modal content -->
-  <div class="modal-content">
-    <div class="modal-header">
-      <span class="close" ng-click="CloseOrderLines()">&times;</span>
-      <p>something here</p>
-    </div>
-    <div class="modal-body">
-      <table id="ordLineTbl">
-        <tr>
-          <th>
-            Id
-          </th>
-          <th>
-            ItemId
-          </th>
-          <th>
-            OrderId
-          </th>
-          <th>
-            Quantity
-          </th>
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close" ng-click="CloseOrderLines()">&times;</span>
+        <p>something here</p>
+      </div>
+      <div class="modal-body">
+        <table id="ordLineTbl">
+          <tr>
+            <th>
+              Id
+            </th>
+            <th>
+              ItemId
+            </th>
+            <th>
+              OrderId
+            </th>
+            <th>
+              Quantity
+            </th>
+          </tr>
+          <tr ng-repeat="orderline in orderlines" ng-class="rowClass(order)">
+          <td>{{orderline.id}}</td>
+          <td><input id="itemId0" type="number" placeholder="{{orderline.item.id}}"/></td>
+          <td>{{orderline.order.id}}</td>
+          <td><input id="quantity0" type="number" placeholder="{{orderline.quantity}}"/></td>
         </tr>
-        <tr ng-repeat="orderline in orderlines" ng-class="rowClass(order)">
-        <td>{{orderline.id}}</td>
-        <td><input id="itemId0" type="number" placeholder="{{orderline.item.id}}"/></td>
-        <td>{{orderline.order.id}}</td>
-        <td><input id="quantity0" type="number" placeholder="{{orderline.quantity}}"/></td>
-      </tr>
-      </table>
-    </div>
-    <div class="modal-footer">
-      <button ng-click="SaveOrderEdit()">Save</button>
-      <button ng-click="AddOrderLineRow()">Add</button>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button ng-click="SaveOrderEdit()">Save</button>
+        <button ng-click="AddOrderLineRow()">Add</button>
+      </div>
     </div>
   </div>
-</div>
+  
+  <div id="myModal2" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close" ng-click="CloseOrderLines()">&times;</span>
+        <p>something here</p>
+      </div>
+      <div class="modal-body">
+        <table id="ordLineTbl2">
+          <tr>
+            <th>
+              ClientId
+            </th>
+            <th>
+              ItemId
+            </th>
+            <th>
+              Quantity
+            </th>
+          </tr>
+          <tr>
+          <td><input id="clientId" type="number" placeholder="1"/></td>
+          <td><input id="itemId_0" type="number" placeholder="1"/></td>
+          <td><input id="quantity_0" type="number" placeholder="1"/></td>
+        </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button ng-click="SaveOrderAddition()">Save</button>
+        <button ng-click="AddOrderLineRow2()">Add</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

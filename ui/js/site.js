@@ -38,6 +38,7 @@
     }];
     
     let counter = 1;
+    let clientId = 'undefined';
     
     $scope.FetchOrders = async function () {
 //      let result = await $scope.FetchData(`${apiBaseUrl}${ordersUri}`);
@@ -98,9 +99,63 @@
       counter = counter + 1;  /* increment counter for next row to be added. */
     }
     
-    $scope.SaveOrderEdit = function () {
-      let table = document.getElementById("ordLineTbl");  /* our table from the DOM. */
+    $scope.AddOrderLineRow2 = function () {
+      let tableRef = document.getElementById('ordLineTbl2').getElementsByTagName('tbody')[0];
       
+      let newRow   = tableRef.insertRow(tableRef.rows.length); /* Insert a row in the table at the last row */
+      
+      let client = newRow.insertCell(0);
+      let itemId = newRow.insertCell(1);
+      let qty = newRow.insertCell(2);
+      
+      if (clientId === 'undefined') {
+        /* client id has not yet been set. */
+        clientId = document.getElementById('clientId').value;
+        document.getElementById('clientId').innerHTML = `${clientId}`;
+      }
+      
+      client.innerHTML = `${clientId}`;
+      itemId.innerHTML = `<input id=\"itemId_${counter}\" type=\"number\" placeholder=\"1\"/>`;
+      qty.innerHTML = `<input id=\"quantity_${counter}\" type=\"number\" placeholder=\"1\"/>`;
+      counter = counter + 1;  /* increment counter for next row to be added. */
+    }
+    
+    $scope.SaveOrderAddition = function () {
+      if (clientId === 'undefined') {
+        /* client id has not yet been set. */
+        clientId = document.getElementById('clientId').value;
+      }
+      
+      /* this is the order request we are making. */
+      let order = {
+        ClientId: clientId,
+        OrderLineRequests: []
+      }
+      
+      for (var i = 0; i < counter; i++) {
+        let itemId = document.getElementById(`itemId_${i}`);
+        let quantity = document.getElementById(`quantity_${i}`);
+        
+        let orderline = {
+          Item: {
+            Id: itemId.value,
+          },
+          Quantity: quantity.value
+        };
+        
+        order.OrderLineRequests.push(orderline);
+      }
+      
+      $http.post(`${apiBaseUrl}/${ordersUri}`, JSON.stringify(order))
+        .success(function (_, _) { $scope.CloseOrderLines(); })
+        .error(function (data, status) {
+          $scope.errorToSearch = errorMessage(data, status);
+        });
+      
+      counter = 1;  /* reset counter */
+    }
+    
+    $scope.SaveOrderEdit = function () {
       /* this is the order request we are making. */
       let order = {
         ClientId: $scope.orders[0].client.id,
@@ -135,7 +190,8 @@
     }
     
     $scope.AddOrder = function () {
-      
+      document.getElementById("myModal2").style.display = "block";
+      document.getElementsByClassName("close")[0].style.display = "block";
     }
     
     $scope.DeleteOrder = function (orderId) {
@@ -152,12 +208,16 @@
       // When the user clicks on <span> (x), close the modal
       document.getElementsByClassName("close")[0].style.display = "none";
       document.getElementById("myModal").style.display = "none";
+      document.getElementById("myModal2").style.display = "none";
     }
     
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
       if (event.target === document.getElementById("myModal")) {
         document.getElementById("myModal").style.display = "none";
+      }
+      else if (event.target === document.getElementById("myModal2")) {
+        document.getElementById("myModal2").style.display = "none";
       }
     }
   }]);
